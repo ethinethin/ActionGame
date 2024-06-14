@@ -24,7 +24,7 @@ function love.load()
   -- State management
   State = "walk"
   -- Setup initial map
-  Map = maps.init_map()
+  Maps = maps.init_map()
   -- Setup player
   Player = player.init_player()
   -- Load sprites
