@@ -14,10 +14,11 @@ local states = {
 }
 
 function love.load()
-  -- Set up window
+  -- Set up window and canvas
   love.window.setMode(consts.SCREEN_W, consts.SCREEN_H, {resizable = false})
   love.window.setTitle("ActionGame")
   love.window.setPosition(0, 0)
+  Canvas = love.graphics.newCanvas(consts.CANVAS_W, consts.CANVAS_H)
   -- Load font
   font.load_font()
   -- State management
@@ -26,6 +27,8 @@ function love.load()
   Map = maps.init_map()
   -- Setup player
   Player = player.init_player()
+  -- Load sprites
+  Sprites = sprites.load_sprites()
 end
 
 function love.update(dt)
@@ -43,6 +46,8 @@ function love.update(dt)
 end
 
 function love.draw()
+  love.graphics.setCanvas(Canvas)
+  love.graphics.clear(0, 0, 0)
   if State == "fishing" then
     states.fishing.draw()
   elseif State == "ingame_menu" then
@@ -54,6 +59,8 @@ function love.draw()
   elseif State == "walk" then
     states.walk.draw()
   end
+  love.graphics.setCanvas()
+  love.graphics.draw(Canvas, 0, 0, 0, consts.SCALE_X, consts.SCALE_Y)
 end
 
 function love.keypressed(key, scancode, isrepeat)
