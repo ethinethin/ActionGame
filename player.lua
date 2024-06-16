@@ -3,6 +3,7 @@ local love = require("love")
 local consts = require("consts")
 local maps = require("maps")
 local sprites = require("sprites")
+local transition = require("states.transition")
 
 function player.init_player()
   local player = { x = 0, y = 0, up = false, left = false, down = false, right = false, frame = 1, f_count = 0, count_max1 = 60, count_max2 = 20, facing = 3, map = 1 }
@@ -31,9 +32,9 @@ end
 function player.move(dt)
   if Player.up then
     Player.y = Player.y - 1 * 300 * dt
-    if maps.is_transition(Player.x, Player.y) then
-      Player.map = 2
-      Player.y = (8 - 1) * consts.SPRITE_H * consts.SPRITE_SCALE
+    if maps.is_transition(Player.x, Player.y, "up") then
+      transition.set_transition(Player.map, 2, "up")
+      State = "transition"
     else
       while maps.is_collision(Player.x, Player.y) do
        Player.y = Player.y + 1
@@ -43,9 +44,9 @@ function player.move(dt)
   end
   if Player.left then
     Player.x = Player.x - 1 * 300 * dt
-    if maps.is_transition(Player.x, Player.y) then
-      Player.map = 1
-      Player.x = (10 - 1) * consts.SPRITE_W * consts.SPRITE_SCALE
+    if maps.is_transition(Player.x, Player.y, "left") then
+      transition.set_transition(Player.map, 1, "left")
+      State = "transition"
     else 
       while maps.is_collision(Player.x, Player.y) do
        Player.x = Player.x + 1
@@ -55,9 +56,9 @@ function player.move(dt)
   end
   if Player.down then
     Player.y = Player.y + 1 * 300 * dt
-    if maps.is_transition(Player.x, Player.y) then
-      Player.map = 3
-      Player.y = (1 - 1) * consts.SPRITE_H * consts.SPRITE_SCALE
+    if maps.is_transition(Player.x, Player.y, "down") then
+      transition.set_transition(Player.map, 3, "down")
+      State = "transition"
     else
       while maps.is_collision(Player.x, Player.y) do
         Player.y = Player.y - 1
@@ -67,10 +68,9 @@ function player.move(dt)
   end
   if Player.right then
     Player.x = Player.x + 1 * 300 * dt
-    if maps.is_transition(Player.x, Player.y) then
-      print("hello")
-      Player.map = 2
-      Player.x = (1 - 1) * consts.SPRITE_W * consts.SPRITE_SCALE
+    if maps.is_transition(Player.x, Player.y, "right") then
+      transition.set_transition(Player.map, 2, "right")
+      State = "transition"
     else
       while maps.is_collision(Player.x, Player.y) do
         Player.x = Player.x - 1

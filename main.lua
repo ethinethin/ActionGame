@@ -10,6 +10,7 @@ local states = {
   ingame_menu = require("states.ingame_menu"),
   main_menu = require("states.main_menu"),
   options = require("states.options"),
+  transition = require("states.transition"),
   walk = require("states.walk")
 }
 
@@ -23,12 +24,12 @@ function love.load()
   font.load_font()
   -- State management
   State = "walk"
+  -- Load sprites
+  Sprites = sprites.load_sprites()
   -- Setup initial map
   Maps = maps.init_map()
   -- Setup player
   Player = player.init_player()
-  -- Load sprites
-  Sprites = sprites.load_sprites()
 end
 
 function love.update(dt)
@@ -40,8 +41,10 @@ function love.update(dt)
     states.main_menu.update(dt)
   elseif State == "options" then
     states.options.update(dt)
+  elseif State == "transition" then
+    states.transition.update(dt)
   elseif State == "walk" then
-      states.walk.update(dt)
+    states.walk.update(dt)
   end
 end
 
@@ -56,6 +59,8 @@ function love.draw()
     states.main_menu.draw()
   elseif State == "options" then
     states.options.draw()
+  elseif State == "transition" then
+    states.transition.draw()
   elseif State == "walk" then
     states.walk.draw()
   end
@@ -72,7 +77,7 @@ function love.keypressed(key, scancode, isrepeat)
     states.main_menu.keypressed(key, scancode, isrepeat)
   elseif State == "options" then
     states.options.keypressed(key, scancode, isrepeat)
-  elseif State == "walk" then
+  elseif State == "transition" or State == "walk" then
     states.walk.keypressed(key, scancode, isrepeat)
   end
 end
@@ -86,7 +91,7 @@ function love.keyreleased(key, scancode)
     states.main_menu.keyreleased(key, scancode)
   elseif State == "options" then
     states.options.keyreleased(key, scancode)
-  elseif State == "walk" then
+  elseif State == "transition" or State == "walk" then
     states.walk.keyreleased(key, scancode)
   end
 end
